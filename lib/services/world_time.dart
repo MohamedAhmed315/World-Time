@@ -1,5 +1,6 @@
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class WorldTime {
 
@@ -7,8 +8,9 @@ class WorldTime {
   late String time;
   String flag;
   String url;
+  late bool isDayTime;
 
-  WorldTime(this.location, this.flag, this.url);
+  WorldTime({required this.location, required this.flag, required this.url});
 
 
   Future<void> getTime() async{
@@ -25,7 +27,8 @@ class WorldTime {
       DateTime now = DateTime.parse(dateTime);
       now = now.add(Duration(hours: int.parse(offset)));
 
-      time = now.toString();
+      isDayTime = now.hour > 5 && now.hour < 19 ? true : false;
+      time = DateFormat.jm().format(now);
     }
     catch(e){
       time = 'Not found';
